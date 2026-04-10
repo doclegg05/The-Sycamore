@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sycamore — Concept A: Rustic Luxury</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold-dark: #8B6914;
+    --gold: #B8860B;
+    --gold-light: #D4A543;
+    --gold-glow: #E8C96A;
+    --cream: #FAF6F0;
+    --cream-warm: #F5EDE0;
+    --charcoal: #2C2C2C;
+    --charcoal-light: #4A4A4A;
+    --stone: #8B8178;
+    --stone-light: #B8AFA6;
+    --bark: #6B5B4F;
+    --black: #1A1A1A;
+    --marble: #F0EDE8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* === LOADING SCREEN === */
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s;
+  }
+  .loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    animation: loaderPulse 1.5s ease-in-out infinite;
+  }
+  .loader-text {
+    font-family: 'Raleway', sans-serif;
+    font-size: 10px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 24px;
+  }
+  .loader-bar {
+    width: 120px;
+    height: 1px;
+    background: var(--stone-light);
+    margin-top: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .loader-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0%;
+    background: var(--gold);
+    animation: loadBar 2s ease-out forwards;
+  }
+  @keyframes loadBar { to { width: 100%; } }
+  @keyframes loaderPulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
+
+  /* === CONCEPT LABEL === */
+  .concept-label {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: var(--gold);
+    color: var(--cream);
+    padding: 8px 16px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border-radius: 2px;
+  }
+
+  /* === SCROLL ANIMATIONS === */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.15s; }
+  .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* === WOOD GRAIN TEXTURE === */
+  .wood-texture { position: relative; }
+  .wood-texture::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(87deg, transparent, transparent 3px, rgba(139,105,20,0.03) 3px, rgba(139,105,20,0.03) 4px),
+      repeating-linear-gradient(92deg, transparent, transparent 7px, rgba(107,91,79,0.02) 7px, rgba(107,91,79,0.02) 8px);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* === NAVIGATION === */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(26,26,26,0.7) 0%, transparent 100%);
+    transition: all 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(26,26,26,0.95);
+    backdrop-filter: blur(12px);
+    padding: 16px 48px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 16px; }
+  .nav-logo img { height: 50px; filter: brightness(1.3) contrast(0.9); transition: height 0.3s; }
+  nav.scrolled .nav-logo img { height: 36px; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-family: 'Raleway', sans-serif;
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 400;
+    opacity: 0.85;
+    transition: opacity 0.3s, color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { opacity: 1; }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* Mobile menu */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 200;
+  }
+  .hamburger span {
+    width: 24px;
+    height: 1.5px;
+    background: var(--cream);
+    transition: all 0.3s;
+  }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 4px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -4px); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,26,26,0.97);
+    z-index: 150;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .mobile-menu.open { display: flex; opacity: 1; }
+  .mobile-menu a {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 28px;
+    opacity: 0.7;
+    transition: opacity 0.3s, color 0.3s;
+  }
+  .mobile-menu a:hover { opacity: 1; color: var(--gold-glow); }
+
+  /* === HERO === */
+  .hero {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .hero-image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    animation: heroZoom 20s ease-in-out infinite alternate;
+  }
+  @keyframes heroZoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(26,26,26,0.2) 0%, rgba(26,26,26,0.1) 40%, rgba(26,26,26,0.5) 70%, rgba(26,26,26,0.85) 100%);
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding-bottom: 80px;
+  }
+  .hero-subtitle {
+    font-family: 'Raleway', sans-serif;
+    font-size: 13px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    font-weight: 300;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 1s ease-out 0.5s forwards;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 8vw, 96px);
+    color: var(--cream);
+    font-weight: 400;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 1s ease-out 0.8s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-glow); }
+  .hero-divider {
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 24px;
+    animation: expandLine 1s ease-out 1.2s forwards;
+  }
+  @keyframes expandLine { to { width: 60px; } }
+  .hero-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--cream);
+    font-weight: 300;
+    font-style: italic;
+    opacity: 0;
+    animation: fadeUp 1s ease-out 1.4s forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 0.85; transform: translateY(0); }
+  }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 2s forwards;
+  }
+  @keyframes fadeIn { to { opacity: 0.6; } }
+  .scroll-hint-line {
+    width: 1px;
+    height: 40px;
+    background: var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-hint-line::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    width: 1px;
+    height: 100%;
+    background: var(--cream);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0% { top: -100%; }
+    100% { top: 100%; }
+  }
+
+  /* Golden particles */
+  .particles {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--gold-glow);
+    border-radius: 50%;
+    opacity: 0;
+    animation: float var(--dur) ease-in-out infinite;
+    animation-delay: var(--delay);
+  }
+  @keyframes float {
+    0% { opacity: 0; transform: translateY(100vh) scale(0); }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.3; }
+    100% { opacity: 0; transform: translateY(-20vh) scale(1); }
+  }
+
+  /* === INTRO === */
+  .intro {
+    padding: 120px 48px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .section-eyebrow {
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+  .intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 400;
+    color: var(--charcoal);
+    line-height: 1.3;
+    margin-bottom: 32px;
+  }
+  .intro p {
+    font-size: 20px;
+    line-height: 1.8;
+    color: var(--charcoal-light);
+    font-weight: 300;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .gold-rule {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 48px auto;
+  }
+
+  /* === PHOTO GRID === */
+  .photo-showcase {
+    padding: 0 48px 120px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 400px 300px;
+    gap: 16px;
+  }
+  .photo-grid .photo-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .photo-grid .photo-item:first-child {
+    grid-row: 1 / 3;
+    grid-column: 1;
+  }
+  .photo-grid .photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+  }
+  .photo-grid .photo-item:hover img { transform: scale(1.05); }
+  .photo-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px 24px 20px;
+    background: linear-gradient(transparent, rgba(26,26,26,0.7));
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cream);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .photo-grid .photo-item:hover .photo-caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* === FEATURE STRIP === */
+  .feature-strip {
+    background: var(--charcoal);
+    padding: 80px 48px;
+    position: relative;
+  }
+  .feature-strip-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 60px;
+    text-align: center;
+  }
+  .feature-item h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--gold-glow);
+    font-weight: 400;
+    margin-bottom: 12px;
+  }
+  .feature-item p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: var(--stone-light);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .feature-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 20px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-light);
+    font-size: 22px;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .feature-item:hover .feature-icon {
+    transform: scale(1.1);
+    background: rgba(184,134,11,0.1);
+  }
+
+  /* === SIGNATURE === */
+  .signature {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 80vh;
+  }
+  .signature-image {
+    position: relative;
+    overflow: hidden;
+  }
+  .signature-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    min-height: 600px;
+    transition: transform 8s ease;
+  }
+  .signature-image:hover img { transform: scale(1.04); }
+  .signature-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px;
+    background: var(--cream-warm);
+    position: relative;
+  }
+  .signature-content::before {
+    content: '\201C';
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    color: var(--gold);
+    opacity: 0.12;
+    position: absolute;
+    top: 40px;
+    left: 60px;
+    line-height: 1;
+  }
+  .signature-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+  .signature-content p {
+    font-size: 19px;
+    line-height: 1.9;
+    color: var(--charcoal-light);
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+  .signature-detail {
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* === CTA === */
+  .cta-section {
+    position: relative;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .cta-bg { position: absolute; inset: 0; }
+  .cta-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .cta-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(26,26,26,0.65);
+  }
+  .cta-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+  .cta-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    color: var(--cream);
+    font-weight: 400;
+    margin-bottom: 24px;
+  }
+  .cta-button {
+    display: inline-block;
+    font-family: 'Raleway', sans-serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cream);
+    border: 1px solid var(--gold);
+    padding: 16px 48px;
+    text-decoration: none;
+    transition: all 0.4s;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+    z-index: -1;
+  }
+  .cta-button:hover { color: var(--black); }
+  .cta-button:hover::before { transform: scaleX(1); }
+
+  /* === FOOTER === */
+  footer {
+    background: var(--black);
+    padding: 60px 48px;
+    text-align: center;
+  }
+  footer img {
+    height: 60px;
+    margin-bottom: 24px;
+    opacity: 0.7;
+  }
+  .footer-text {
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .footer-location {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: var(--stone-light);
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  /* === LIGHTBOX === */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    background: rgba(26,26,26,0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .lightbox.open { display: flex; opacity: 1; }
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 4px;
+    transform: scale(0.9);
+    transition: transform 0.4s;
+  }
+  .lightbox.open img { transform: scale(1); }
+  .lightbox-close {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cream);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+    background: none;
+    border: none;
+  }
+  .lightbox-close:hover { opacity: 1; }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .intro { padding: 80px 24px; }
+    .photo-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .photo-grid .photo-item:first-child { grid-row: auto; grid-column: auto; }
+    .photo-grid .photo-item { height: 300px; }
+    .signature { grid-template-columns: 1fr; }
+    .signature-content { padding: 60px 24px; }
+    .feature-strip-inner { grid-template-columns: 1fr; gap: 40px; }
+    .photo-showcase { padding: 0 24px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div class="loader" id="loader">
+  <img src="images/logo.jpg" alt="" class="loader-logo">
+  <div class="loader-text">The Sycamore</div>
+  <div class="loader-bar"></div>
+</div>
+
+<div class="concept-label">Concept A — Rustic Luxury</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close">Close &times;</button>
+  <img src="" alt="" id="lightbox-img">
+</div>
+
+<nav id="mainNav">
+  <div class="nav-logo">
+    <img src="images/logo.jpg" alt="Spruce Ridge Properties">
+  </div>
+  <ul class="nav-links">
+    <li><a href="#">The Cabin</a></li>
+    <li><a href="#">Gallery</a></li>
+    <li><a href="#">Amenities</a></li>
+    <li><a href="#">Location</a></li>
+    <li><a href="#">Book Now</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#">The Cabin</a>
+  <a href="#">Gallery</a>
+  <a href="#">Amenities</a>
+  <a href="#">Location</a>
+  <a href="#">Book Now</a>
+</div>
+
+<section class="hero">
+  <div class="hero-image">
+    <img src="images/IMG_7454.jpeg" alt="The Sycamore cabin in winter">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="particles" id="particles"></div>
+  <div class="hero-content">
+    <div class="hero-subtitle">Spruce Ridge Properties Presents</div>
+    <h1 class="hero-title">The <em>Sycamore</em></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-tagline">A modern cabin retreat in the heart of West Virginia</p>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-hint-line"></div>
+  </div>
+</section>
+
+<section class="intro wood-texture">
+  <div class="reveal">
+    <div class="section-eyebrow">Welcome</div>
+  </div>
+  <h2 class="reveal reveal-delay-1">Where Nature Becomes Architecture</h2>
+  <p class="reveal reveal-delay-2">Nestled among the trees of Mount Nebo, The Sycamore is a handcrafted cabin where a centuries-old sycamore tree rises through the heart of the home — stripped, treated, and transformed into a living sculpture that connects earth to sky.</p>
+  <div class="gold-rule reveal reveal-delay-3"></div>
+</section>
+
+<section class="photo-showcase">
+  <div class="photo-grid">
+    <div class="photo-item reveal" data-lightbox>
+      <img src="images/IMG_7456.jpeg" alt="The Sycamore tree centerpiece">
+      <div class="photo-caption">The Heart of the Home</div>
+    </div>
+    <div class="photo-item reveal reveal-delay-1" data-lightbox>
+      <img src="images/IMG_7455.jpeg" alt="Master bedroom">
+      <div class="photo-caption">Master Suite</div>
+    </div>
+    <div class="photo-item reveal reveal-delay-2" data-lightbox>
+      <img src="images/IMG_7452.jpeg" alt="Bathroom">
+      <div class="photo-caption">Artisan Bath</div>
+    </div>
+    <div class="photo-item reveal reveal-delay-1" data-lightbox>
+      <img src="images/IMG_7458.jpeg" alt="Stone fireplace">
+      <div class="photo-caption">Stone Hearth</div>
+    </div>
+    <div class="photo-item reveal reveal-delay-2" data-lightbox>
+      <img src="images/IMG_7451.jpeg" alt="Barn doors">
+      <div class="photo-caption">Hand-crafted Details</div>
+    </div>
+  </div>
+</section>
+
+<section class="feature-strip">
+  <div class="feature-strip-inner">
+    <div class="feature-item reveal">
+      <div class="feature-icon">🔥</div>
+      <h3>Stone Fireplace</h3>
+      <p>A river stone hearth anchors the living room with warmth and rustic elegance</p>
+    </div>
+    <div class="feature-item reveal reveal-delay-1">
+      <div class="feature-icon">🌳</div>
+      <h3>The Sycamore Tree</h3>
+      <p>A treated sycamore rises through the cabin — nature as architecture</p>
+    </div>
+    <div class="feature-item reveal reveal-delay-2">
+      <div class="feature-icon">⛰️</div>
+      <h3>Mountain Setting</h3>
+      <p>Surrounded by West Virginia forest with panoramic views from every window</p>
+    </div>
+  </div>
+</section>
+
+<section class="signature">
+  <div class="signature-image reveal-left">
+    <img src="images/IMG_7456.jpeg" alt="The Sycamore tree">
+  </div>
+  <div class="signature-content reveal-right">
+    <div class="section-eyebrow">The Signature</div>
+    <h2>A Tree That Tells a Story</h2>
+    <p>At the center of The Sycamore stands its namesake — a majestic sycamore tree, carefully preserved and integrated into the cabin's architecture. Rising from the main floor through a hand-carved live-edge table, it serves as both sculpture and conversation piece, connecting the warmth of the cabin to the wildness of the forest outside.</p>
+    <span class="signature-detail">One of a kind · Handcrafted · Unforgettable</span>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-bg">
+    <img src="images/IMG_7457.jpeg" alt="View through A-frame windows">
+  </div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content reveal">
+    <h2>Begin Your Retreat</h2>
+    <a href="#" class="cta-button">Check Availability</a>
+  </div>
+</section>
+
+<footer>
+  <img src="images/logo.jpg" alt="Spruce Ridge Properties">
+  <p class="footer-location">Mount Nebo, West Virginia</p>
+  <p class="footer-text">&copy; 2026 Spruce Ridge Properties, LLC</p>
+</footer>
+
+<script>
+// Loading screen
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 2200);
+});
+
+// Scroll-triggered animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+// Nav scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// Mobile menu
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+});
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  hamburger.classList.remove('active');
+  mobileMenu.classList.remove('open');
+}));
+
+// Lightbox
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+document.querySelectorAll('[data-lightbox]').forEach(item => {
+  item.addEventListener('click', () => {
+    lightboxImg.src = item.querySelector('img').src;
+    lightbox.classList.add('open');
+  });
+});
+lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+
+// Golden particles
+const particlesContainer = document.getElementById('particles');
+for (let i = 0; i < 20; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.setProperty('--dur', (8 + Math.random() * 12) + 's');
+  p.style.setProperty('--delay', (Math.random() * 10) + 's');
+  p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
+  particlesContainer.appendChild(p);
+}
+</script>
+</body>
+</html>

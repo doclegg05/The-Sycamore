@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sycamore — Concept B: Modern Minimal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@200;300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --white: #FFFFFF;
+    --off-white: #FAFAF8;
+    --sand: #F2EDE6;
+    --gold: #C4973B;
+    --gold-muted: #A88B4A;
+    --warm-gray: #9A9490;
+    --text: #2D2926;
+    --text-light: #5C5652;
+    --black: #1C1917;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', -apple-system, sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* === LOADER === */
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s;
+  }
+  .loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: var(--text);
+    letter-spacing: 2px;
+    animation: loaderFade 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes loaderFade {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+  }
+  .loader-line {
+    width: 80px;
+    height: 1px;
+    background: var(--sand);
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .loader-line::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; height: 100%;
+    width: 0%;
+    background: var(--gold);
+    animation: loadFill 1.8s ease-out forwards;
+  }
+  @keyframes loadFill { to { width: 100%; } }
+
+  /* === CONCEPT LABEL === */
+  .concept-label {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: var(--text);
+    color: var(--white);
+    padding: 8px 16px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  /* === SCROLL ANIMATIONS === */
+  .reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.2s; }
+  .reveal-delay-2 { transition-delay: 0.4s; }
+
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+  /* === NAV === */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 28px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    mix-blend-mode: difference;
+  }
+  .nav-wordmark {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--white);
+    letter-spacing: 1px;
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Outfit', sans-serif;
+    color: var(--white);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 300;
+    transition: opacity 0.3s;
+  }
+  .nav-links a:hover { opacity: 0.6; }
+
+  /* Mobile menu */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 200;
+    mix-blend-mode: difference;
+  }
+  .hamburger span {
+    width: 24px;
+    height: 1.5px;
+    background: var(--white);
+    transition: all 0.3s;
+  }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 4px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -4px); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--white);
+    z-index: 150;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .mobile-menu.open { display: flex; opacity: 1; }
+  .mobile-menu a {
+    font-family: 'DM Serif Display', serif;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 28px;
+    transition: color 0.3s;
+  }
+  .mobile-menu a:hover { color: var(--gold); }
+
+  /* === HERO === */
+  .hero {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-image {
+    position: absolute;
+    inset: 0;
+  }
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    filter: brightness(0.85) contrast(1.05);
+    animation: heroSlow 25s ease-in-out infinite alternate;
+  }
+  @keyframes heroSlow {
+    from { transform: scale(1); }
+    to { transform: scale(1.06); }
+  }
+  .hero-title-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 60px 60px;
+    z-index: 2;
+  }
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(60px, 10vw, 140px);
+    color: var(--white);
+    font-weight: 400;
+    line-height: 0.95;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .hero-title .line {
+    display: block;
+    opacity: 0;
+    transform: translateY(100%);
+    animation: titleReveal 0.8s ease-out forwards;
+  }
+  .hero-title .line:nth-child(2) { animation-delay: 0.2s; }
+  @keyframes titleReveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-location {
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--white);
+    font-weight: 200;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.8s forwards;
+  }
+  @keyframes fadeIn { to { opacity: 0.7; } }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    right: 60px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 1.5s forwards;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: var(--white);
+    opacity: 0.4;
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    width: 1px;
+    height: 100%;
+    background: var(--gold);
+    animation: scrollDown 2s ease-in-out infinite;
+  }
+  @keyframes scrollDown {
+    0% { top: -100%; }
+    100% { top: 100%; }
+  }
+
+  /* === STATEMENT === */
+  .statement {
+    padding: 160px 60px;
+    max-width: 800px;
+  }
+  .statement p {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(24px, 3vw, 36px);
+    line-height: 1.6;
+    color: var(--text);
+    font-weight: 400;
+  }
+  .statement p .highlight { color: var(--gold); }
+
+  /* === DIPTYCH === */
+  .diptych {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 80vh;
+    gap: 4px;
+  }
+  .diptych-panel {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .diptych-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 6s ease-out;
+  }
+  .diptych-panel:hover img { transform: scale(1.04); }
+  .diptych-label {
+    position: absolute;
+    bottom: 32px;
+    left: 32px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--white);
+    font-weight: 300;
+    background: rgba(28,25,23,0.5);
+    padding: 8px 16px;
+    backdrop-filter: blur(10px);
+    transform: translateY(16px);
+    opacity: 0;
+    transition: all 0.4s ease;
+  }
+  .diptych-panel:hover .diptych-label {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* === HORIZONTAL SCROLL GALLERY === */
+  .hscroll-section {
+    padding: 100px 0 100px 60px;
+    overflow: hidden;
+  }
+  .hscroll-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 48px;
+    padding-right: 60px;
+  }
+  .hscroll-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--warm-gray);
+  }
+  .hscroll-hint {
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    color: var(--warm-gray);
+    font-weight: 300;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hscroll-hint::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    animation: hscrollHint 1.5s ease-in-out infinite;
+  }
+  @keyframes hscrollHint {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(10px); }
+  }
+  .hscroll-track {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-right: 60px;
+    padding-bottom: 16px;
+  }
+  .hscroll-track::-webkit-scrollbar { display: none; }
+  .hscroll-card {
+    flex: 0 0 380px;
+    height: 480px;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    scroll-snap-align: start;
+    cursor: pointer;
+  }
+  .hscroll-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .hscroll-card:hover img { transform: scale(1.05); }
+  .hscroll-card-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 48px 24px 24px;
+    background: linear-gradient(transparent, rgba(28,25,23,0.7));
+  }
+  .hscroll-card-label span {
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--white);
+    font-weight: 300;
+  }
+
+  /* === FEATURES === */
+  .features {
+    padding: 120px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .features-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 80px;
+    border-bottom: 1px solid var(--sand);
+    padding-bottom: 24px;
+  }
+  .features-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--warm-gray);
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 80px;
+  }
+  .feature-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    color: var(--sand);
+    margin-bottom: 20px;
+    line-height: 1;
+  }
+  .feature-number.counted { transition: none; }
+  .feature-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 12px;
+    font-weight: 400;
+  }
+  .feature-desc {
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    color: var(--text-light);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* === IMMERSIVE === */
+  .immersive {
+    position: relative;
+    height: 90vh;
+    overflow: hidden;
+  }
+  .immersive-img-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .immersive img {
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    object-position: center;
+    will-change: transform;
+  }
+  .immersive-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(28,25,23,0.75) 0%, rgba(28,25,23,0.3) 50%, transparent 100%);
+  }
+  .immersive-content {
+    position: absolute;
+    top: 50%;
+    left: 60px;
+    transform: translateY(-50%);
+    max-width: 500px;
+    z-index: 2;
+  }
+  .immersive-content .section-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+  .immersive-content h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 4vw, 56px);
+    color: var(--white);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 24px;
+  }
+  .immersive-content p {
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.8;
+    font-weight: 200;
+  }
+
+  /* === DETAILS STRIP === */
+  .details-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--sand);
+    border-bottom: 1px solid var(--sand);
+  }
+  .detail-cell {
+    padding: 48px 40px;
+    text-align: center;
+    border-right: 1px solid var(--sand);
+  }
+  .detail-cell:last-child { border-right: none; }
+  .detail-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .detail-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    font-weight: 400;
+  }
+
+  /* === CTA === */
+  .cta {
+    padding: 160px 60px;
+    text-align: center;
+    background: var(--off-white);
+  }
+  .cta h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    color: var(--text);
+    font-weight: 400;
+    margin-bottom: 12px;
+  }
+  .cta h2 em { font-style: italic; color: var(--gold); }
+  .cta-sub {
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    color: var(--warm-gray);
+    font-weight: 300;
+    margin-bottom: 48px;
+  }
+  .cta-btn {
+    display: inline-block;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--white);
+    background: var(--text);
+    padding: 18px 56px;
+    text-decoration: none;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+    z-index: 0;
+  }
+  .cta-btn:hover::before { transform: translateY(0); }
+  .cta-btn span { position: relative; z-index: 1; }
+
+  /* === LIGHTBOX === */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    background: rgba(28,25,23,0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .lightbox.open { display: flex; opacity: 1; }
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    transform: scale(0.92);
+    transition: transform 0.4s;
+  }
+  .lightbox.open img { transform: scale(1); }
+  .lightbox-close {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--white);
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+    background: none;
+    border: none;
+    font-weight: 300;
+  }
+  .lightbox-close:hover { opacity: 1; }
+
+  /* === FOOTER === */
+  footer {
+    padding: 48px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--sand);
+  }
+  .footer-left {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--text);
+  }
+  .footer-right {
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    color: var(--warm-gray);
+    letter-spacing: 1px;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-title-container { padding: 0 24px 40px; }
+    .statement { padding: 100px 24px; }
+    .diptych { grid-template-columns: 1fr; height: auto; }
+    .diptych-panel { height: 50vh; }
+    .hscroll-section { padding-left: 24px; }
+    .hscroll-header { padding-right: 24px; }
+    .hscroll-card { flex: 0 0 300px; height: 400px; }
+    .features { padding: 80px 24px; }
+    .features-grid { grid-template-columns: 1fr; gap: 48px; }
+    .immersive-content { left: 24px; right: 24px; }
+    .details-strip { grid-template-columns: repeat(2, 1fr); }
+    .detail-cell:nth-child(2) { border-right: none; }
+    .cta { padding: 100px 24px; }
+    footer { flex-direction: column; gap: 16px; padding: 36px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-name">The Sycamore</div>
+  <div class="loader-line"></div>
+</div>
+
+<div class="concept-label">Concept B — Modern Minimal</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close">Close</button>
+  <img src="" alt="" id="lightbox-img">
+</div>
+
+<nav>
+  <div class="nav-wordmark">The Sycamore</div>
+  <ul class="nav-links">
+    <li><a href="#">Stay</a></li>
+    <li><a href="#">Explore</a></li>
+    <li><a href="#">Gallery</a></li>
+    <li><a href="#">Reserve</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#">Stay</a>
+  <a href="#">Explore</a>
+  <a href="#">Gallery</a>
+  <a href="#">Reserve</a>
+</div>
+
+<section class="hero">
+  <div class="hero-image">
+    <img src="images/IMG_7456.jpeg" alt="The Sycamore tree centerpiece">
+  </div>
+  <div class="hero-title-container">
+    <h1 class="hero-title">
+      <span class="line">The</span>
+      <span class="line">Sycamore</span>
+    </h1>
+    <p class="hero-location">Mount Nebo, West Virginia</p>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<section class="statement reveal">
+  <p>A cabin where a <span class="highlight">centuries-old sycamore tree</span> rises through the living room — preserved, sculpted, and woven into the architecture itself. This is not a rental. This is a <span class="highlight">place that remembers you.</span></p>
+</section>
+
+<section class="diptych">
+  <div class="diptych-panel reveal-scale" data-lightbox>
+    <img src="images/IMG_7455.jpeg" alt="Master bedroom">
+    <div class="diptych-label">Master Suite</div>
+  </div>
+  <div class="diptych-panel reveal-scale reveal-delay-1" data-lightbox>
+    <img src="images/IMG_7458.jpeg" alt="Stone fireplace">
+    <div class="diptych-label">Living Room</div>
+  </div>
+</section>
+
+<!-- NEW: Horizontal scroll gallery -->
+<section class="hscroll-section">
+  <div class="hscroll-header">
+    <h2>Explore the Space</h2>
+    <div class="hscroll-hint">Scroll to explore</div>
+  </div>
+  <div class="hscroll-track">
+    <div class="hscroll-card" data-lightbox>
+      <img src="images/IMG_7456.jpeg" alt="The Sycamore tree">
+      <div class="hscroll-card-label"><span>The Sycamore Tree</span></div>
+    </div>
+    <div class="hscroll-card" data-lightbox>
+      <img src="images/IMG_7451.jpeg" alt="Barn doors">
+      <div class="hscroll-card-label"><span>Artisan Details</span></div>
+    </div>
+    <div class="hscroll-card" data-lightbox>
+      <img src="images/IMG_7452.jpeg" alt="Custom bathroom">
+      <div class="hscroll-card-label"><span>Custom Bath</span></div>
+    </div>
+    <div class="hscroll-card" data-lightbox>
+      <img src="images/IMG_7457.jpeg" alt="A-frame view">
+      <div class="hscroll-card-label"><span>Mountain View</span></div>
+    </div>
+    <div class="hscroll-card" data-lightbox>
+      <img src="images/IMG_7454.jpeg" alt="Exterior">
+      <div class="hscroll-card-label"><span>Winter Exterior</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="features-header">
+    <h2>What Sets It Apart</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature reveal">
+      <div class="feature-number" data-count="01">01</div>
+      <div class="feature-title">The Tree</div>
+      <p class="feature-desc">A sycamore rises from floor to ceiling through a hand-carved live-edge table — the architectural soul of the cabin.</p>
+    </div>
+    <div class="feature reveal reveal-delay-1">
+      <div class="feature-number" data-count="02">02</div>
+      <div class="feature-title">Artisan Craft</div>
+      <p class="feature-desc">Custom barn doors, black iron hardware, mason jar lighting, and hand-finished wood throughout every room.</p>
+    </div>
+    <div class="feature reveal reveal-delay-2">
+      <div class="feature-number" data-count="03">03</div>
+      <div class="feature-title">Mountain Solitude</div>
+      <p class="feature-desc">Surrounded by forest on every side. The only sounds are wind through the trees and fire in the hearth.</p>
+    </div>
+  </div>
+</section>
+
+<section class="immersive">
+  <div class="immersive-img-wrap">
+    <img src="images/IMG_7454.jpeg" alt="The Sycamore in winter" id="parallaxImg">
+  </div>
+  <div class="immersive-overlay"></div>
+  <div class="immersive-content reveal">
+    <div class="section-label">Every Season</div>
+    <h2>Winter changes everything</h2>
+    <p>Snow blankets the forest and silence settles in. The cabin glows warm from within — stone fireplace lit, deck frosted white, the world reduced to just this place and this moment.</p>
+  </div>
+</section>
+
+<div class="details-strip">
+  <div class="detail-cell reveal">
+    <div class="detail-value">—</div>
+    <div class="detail-label">Bedrooms</div>
+  </div>
+  <div class="detail-cell reveal reveal-delay-1">
+    <div class="detail-value">—</div>
+    <div class="detail-label">Bathrooms</div>
+  </div>
+  <div class="detail-cell reveal reveal-delay-1">
+    <div class="detail-value">—</div>
+    <div class="detail-label">Guests</div>
+  </div>
+  <div class="detail-cell reveal reveal-delay-2">
+    <div class="detail-value">5★</div>
+    <div class="detail-label">Rating</div>
+  </div>
+</div>
+
+<section class="cta reveal">
+  <h2>Your next <em>escape</em></h2>
+  <p class="cta-sub">Mount Nebo, West Virginia</p>
+  <a href="#" class="cta-btn"><span>Check Availability</span></a>
+</section>
+
+<footer>
+  <div class="footer-left">Spruce Ridge Properties</div>
+  <div class="footer-right">&copy; 2026 Spruce Ridge Properties, LLC</div>
+</footer>
+
+<script>
+// Loader
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 2000);
+});
+
+// Scroll reveals
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
+
+// Mobile menu
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+});
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  hamburger.classList.remove('active');
+  mobileMenu.classList.remove('open');
+}));
+
+// Lightbox
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+document.querySelectorAll('[data-lightbox]').forEach(item => {
+  item.addEventListener('click', () => {
+    lightboxImg.src = item.querySelector('img').src;
+    lightbox.classList.add('open');
+  });
+});
+lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+
+// Parallax on immersive image
+const parallaxImg = document.getElementById('parallaxImg');
+const immersive = document.querySelector('.immersive');
+window.addEventListener('scroll', () => {
+  if (!immersive) return;
+  const rect = immersive.getBoundingClientRect();
+  const progress = -rect.top / window.innerHeight;
+  if (progress > -1 && progress < 2) {
+    parallaxImg.style.transform = `translateY(${progress * -60}px)`;
+  }
+});
+</script>
+</body>
+</html>

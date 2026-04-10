@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Concepts Preview Server",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "concepts", "-l", "3001"],
+      "port": 3001
+    }
+  ]
+}

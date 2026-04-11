@@ -425,18 +425,26 @@
     nav { padding: 16px 20px; }
     .nav-links { display: none; }
     .hamburger { display: flex; }
-    .hero { grid-template-columns: 1fr; height: auto; }
-    .hero-left { padding: 120px 24px 40px; min-height: 40vh; }
-    .hero-right { height: 40vh; }
+    .concept-label { font-size: 9px; padding: 6px 12px; letter-spacing: 2px; top: 16px; left: 16px; }
+    .hero { grid-template-columns: 1fr; height: auto; max-height: none; }
+    .hero-left { padding: 80px 24px 32px; min-height: auto; }
+    .hero-title { font-size: clamp(32px, 8vw, 56px); }
+    .hero-tagline { font-size: 14px; max-width: 100%; }
+    .hero-right { height: 35vh; }
     .hero-right::after { background: linear-gradient(0deg, var(--black) 0%, transparent 30%); }
     .hero-scroll-tag { display: none; }
+    .mobile-menu a { font-size: 24px; }
+    .marquee-item { font-size: 12px; }
     .editorial { grid-template-columns: 1fr; }
-    .editorial-text { padding: 60px 24px; }
-    .editorial-image { height: 50vh; }
+    .editorial-text { padding: 48px 24px; }
+    .editorial-image { height: 40vh; min-height: 250px; }
     .triptych { grid-template-columns: 1fr; }
-    .triptych-panel { height: 40vh; }
-    .pull-quote { padding: 80px 24px; }
-    .cta-section { padding: 80px 24px; }
+    .triptych-panel { height: 35vh; }
+    .pull-quote { padding: 60px 20px; }
+    .pull-quote blockquote { font-size: 20px; }
+    .cta-section { padding: 60px 24px; }
+    .cta-section h2 { font-size: clamp(28px, 6vw, 48px); }
+    .cta-btn { padding: 16px 40px; font-size: 12px; }
     footer { flex-direction: column; gap: 16px; padding: 32px 24px; }
   }
 </style>

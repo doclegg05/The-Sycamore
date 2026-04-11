@@ -664,19 +664,29 @@
     nav { padding: 20px 24px; }
     .nav-links { display: none; }
     .hamburger { display: flex; }
-    .hero-title-container { padding: 0 24px 40px; }
-    .statement { padding: 100px 24px; }
+    .concept-label { font-size: 9px; padding: 6px 12px; letter-spacing: 2px; top: 16px; left: 16px; }
+    .hero { height: 60vh; max-height: 500px; }
+    .hero-title { font-size: clamp(28px, 8vw, 60px); }
+    .hero-title-container { padding: 0 24px 32px; }
+    .hero-location { font-size: 10px; letter-spacing: 4px; }
+    .scroll-indicator { right: 24px; }
+    .statement { padding: 80px 24px; }
+    .statement p { font-size: 18px; }
     .diptych { grid-template-columns: 1fr; height: auto; }
-    .diptych-panel { height: 50vh; }
+    .diptych-panel { height: 45vh; }
     .hscroll-section { padding-left: 24px; }
     .hscroll-header { padding-right: 24px; }
-    .hscroll-card { flex: 0 0 300px; height: 400px; }
-    .features { padding: 80px 24px; }
-    .features-grid { grid-template-columns: 1fr; gap: 48px; }
-    .immersive-content { left: 24px; right: 24px; }
-    .details-strip { grid-template-columns: repeat(2, 1fr); }
-    .detail-cell:nth-child(2) { border-right: none; }
-    .cta { padding: 100px 24px; }
+    .hscroll-card { flex: 0 0 280px; height: 380px; }
+    .features { padding: 60px 24px; }
+    .features-grid { grid-template-columns: 1fr; gap: 40px; }
+    .immersive-content { left: 24px; right: 24px; max-width: 100%; }
+    .immersive { height: auto; min-height: 50vh; }
+    .details-strip { grid-template-columns: 1fr; }
+    .detail-cell { border-right: none; border-bottom: 1px solid var(--sand); }
+    .detail-cell:last-child { border-bottom: none; }
+    .detail-cell { padding: 32px 24px; }
+    .cta { padding: 80px 24px; }
+    .cta h2 { font-size: clamp(28px, 5vw, 48px); }
     footer { flex-direction: column; gap: 16px; padding: 36px 24px; }
   }
 </style>

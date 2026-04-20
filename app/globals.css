@@ -7,10 +7,21 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-cream text-charcoal font-body antialiased;
+    @apply bg-ink text-cream font-body antialiased;
+  }
+  /* Fine grain texture overlay across entire viewport */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9997;
+    opacity: 0.55;
+    mix-blend-mode: overlay;
   }
   ::selection {
-    @apply bg-gold/30 text-ink;
+    @apply bg-gold/30 text-cream;
   }
   section[id] {
     scroll-margin-top: 80px;
@@ -19,12 +30,63 @@
 
 @layer components {
   .label {
-    @apply font-label text-[11px] uppercase tracking-label text-charcoal-light;
+    @apply font-label text-[10px] uppercase tracking-[0.28em] text-gold-bright;
+  }
+  .label-muted {
+    @apply font-label text-[10px] uppercase tracking-[0.28em] text-stone;
+  }
+  .gold-bar {
+    @apply block w-10 h-[3px] bg-gold;
   }
   .section {
     @apply px-6 md:px-12 lg:px-20 py-20 md:py-28;
   }
-  .section-dark {
-    @apply bg-ink text-cream;
+}
+
+/* ── Reveal animations ── */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes slowZoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+  }
+  .slow-zoom { animation: slowZoom 20s ease-in-out infinite alternate; }
+
+  @keyframes titleRise {
+    from { opacity: 0; transform: translateY(100%); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .title-line { overflow: hidden; display: block; }
+  .title-line-inner {
+    display: block;
+    animation: titleRise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .title-line:nth-child(2) .title-line-inner { animation-delay: 0.15s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up {
+    animation: fadeUp 0.8s ease-out both;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .marquee-track {
+    animation: marquee 40s linear infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  .pulse-line {
+    animation: pulse 2s ease-in-out infinite;
   }
 }
+
+/* ── Text wrapping ── */
+.balance { text-wrap: balance; }
+.pretty { text-wrap: pretty; }

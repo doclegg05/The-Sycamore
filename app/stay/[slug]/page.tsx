@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getAllProperties, getPropertyBySlug } from '@/lib/properties';
@@ -31,15 +32,15 @@ export default async function PropertyPage(
     <>
       <section className="section pt-40">
         <p className="label mb-8">Property No. 01</p>
-        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[0.95] text-ink">
+        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[0.95] text-cream font-normal">
           {name}
         </h1>
         {tagline && (
-          <p className="mt-10 max-w-2xl text-2xl italic text-charcoal-light font-body">
+          <p className="mt-10 max-w-2xl text-2xl italic text-cream/70 font-display">
             {tagline}
           </p>
         )}
-        {location && (location.city || location.region) && (
+        {location && (location.city || location.state || location.region) && (
           <p className="label mt-8">
             {[location.city, location.state, location.region].filter(Boolean).join(' · ')}
           </p>
@@ -47,24 +48,24 @@ export default async function PropertyPage(
       </section>
 
       {capacity && (capacity.bedrooms || capacity.bathrooms || capacity.maxGuests) && (
-        <section className="section border-t border-stone-light/30">
+        <section className="section border-t border-ink-elevated">
           <div className="grid grid-cols-3 gap-8 max-w-2xl">
             {capacity.bedrooms != null && (
               <div>
                 <p className="label">Bedrooms</p>
-                <p className="font-display text-4xl mt-2">{capacity.bedrooms}</p>
+                <p className="font-display text-4xl mt-2 text-cream">{capacity.bedrooms}</p>
               </div>
             )}
             {capacity.bathrooms != null && (
               <div>
                 <p className="label">Bathrooms</p>
-                <p className="font-display text-4xl mt-2">{capacity.bathrooms}</p>
+                <p className="font-display text-4xl mt-2 text-cream">{capacity.bathrooms}</p>
               </div>
             )}
             {capacity.maxGuests != null && (
               <div>
                 <p className="label">Sleeps</p>
-                <p className="font-display text-4xl mt-2">{capacity.maxGuests}</p>
+                <p className="font-display text-4xl mt-2 text-cream">{capacity.maxGuests}</p>
               </div>
             )}
           </div>
@@ -72,8 +73,8 @@ export default async function PropertyPage(
       )}
 
       {booking && (booking.airbnb || booking.vrbo || booking.direct || booking.inquiryEnabled) && (
-        <section className="section-dark section">
-          <p className="label text-gold-bright mb-8">Book Your Stay</p>
+        <section className="section border-t border-ink-elevated">
+          <p className="label mb-8">Book Your Stay</p>
           <div className="flex flex-wrap gap-4">
             {booking.direct && (
               <a
@@ -104,12 +105,12 @@ export default async function PropertyPage(
               </a>
             )}
             {booking.inquiryEnabled && (
-              <a
+              <Link
                 href="/contact"
                 className="border border-cream text-cream px-8 py-4 font-label text-xs tracking-label hover:bg-cream hover:text-ink transition"
               >
                 Inquire
-              </a>
+              </Link>
             )}
           </div>
         </section>

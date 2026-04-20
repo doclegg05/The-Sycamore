@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Bodoni_Moda, Cormorant_Garamond, Space_Mono } from 'next/font/google';
+import { Bodoni_Moda, Syne, Space_Mono } from 'next/font/google';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import './globals.css';
@@ -12,11 +12,10 @@ const display = Bodoni_Moda({
   display: 'swap',
 });
 
-const body = Cormorant_Garamond({
+const body = Syne({
   subsets: ['latin'],
   variable: '--font-body',
-  weight: ['300', '400', '500', '600'],
-  style: ['normal', 'italic'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 
@@ -29,10 +28,10 @@ const label = Space_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Spruce Ridge Properties',
-    template: '%s | Spruce Ridge Properties',
+    default: 'The Sycamore — Spruce Ridge Lodge',
+    template: '%s | Spruce Ridge Lodge',
   },
-  description: 'A curated collection of thoughtfully-designed stays.',
+  description: 'A short-term rental shaped around the tree it was built for. A stay with deliberate detail, in the hills of West Virginia.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

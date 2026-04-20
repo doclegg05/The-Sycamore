@@ -12,6 +12,9 @@
   ::selection {
     @apply bg-gold/30 text-ink;
   }
+  section[id] {
+    scroll-margin-top: 80px;
+  }
 }
 
 @layer components {

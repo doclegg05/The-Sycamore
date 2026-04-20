@@ -1,7 +1,15 @@
 node_modules/
 .next/
+out/
 .env
 .env.local
 .DS_Store
 Thumbs.db
 .remember/
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+
+# Editor / OS temp files
+.~lock.*#
+*.tmp

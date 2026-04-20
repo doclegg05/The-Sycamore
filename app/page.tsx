@@ -10,8 +10,8 @@ const marqueeItems = [
 ];
 
 const gallery = [
-  { src: '/photos/Title Shot of Cabin.jpg', alt: 'The Sycamore — cabin exterior', span: 'md:col-span-2 md:row-span-2' },
-  { src: '/photos/Title Shot window to outside.jpg', alt: 'The Sycamore — interior looking out' },
+  { src: '/photos/Backside Outside View of Cabin.jpg', alt: 'The Sycamore — cabin exterior', span: 'md:col-span-2 md:row-span-2' },
+  { src: '/photos/Outside View Snow.jpeg', alt: 'The Sycamore — exterior in snow' },
   { src: '/photos/Bedroom 1.jpeg', alt: 'The Sycamore — bedroom' },
   { src: '/photos/Indoor Fireplace.jpeg', alt: 'The Sycamore — indoor fireplace', span: 'md:col-span-2' },
   { src: '/photos/Outdoor Kitchen with Stone Fireplace.jpg', alt: 'The Sycamore — outdoor kitchen with stone fireplace' },
@@ -58,7 +58,7 @@ export default function HomePage() {
 
         <div className="relative overflow-hidden min-h-[300px] md:min-h-0">
           <Image
-            src="/photos/Title shot with Sycamore tree.jpg"
+            src="/photos/Tree Feature.jpeg"
             alt="The Sycamore — the tree at the heart of the house"
             fill
             priority
@@ -116,8 +116,8 @@ export default function HomePage() {
 
         <div className="relative overflow-hidden min-h-[400px] md:min-h-0">
           <Image
-            src="/photos/Tree Feature.jpeg"
-            alt="The Sycamore — the tree inside the house"
+            src="/photos/Window View outside.jpeg"
+            alt="The Sycamore — a window onto the hills"
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover transition-transform duration-[8000ms] ease-out hover:scale-[1.04]"

@@ -3,30 +3,19 @@ import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 
 const marqueeItems = [
-  'Short-term rental',
-  'Est. 2026',
-  'Spruce Ridge Lodge',
-  'West Virginia',
-  'Property № 01',
   'The Sycamore',
+  'Spruce Ridge Lodge',
+  'Near Summersville Lake',
+  'West Virginia',
 ];
 
-const triptych = [
-  {
-    src: '/photos/Indoor Fireplace.jpeg',
-    alt: 'The Sycamore — indoor fireplace',
-    caption: 'Interior · №01',
-  },
-  {
-    src: '/photos/Outdoor Kitchen with Stone Fireplace.jpg',
-    alt: 'The Sycamore — outdoor kitchen with stone fireplace',
-    caption: 'Outdoor Kitchen · №02',
-  },
-  {
-    src: '/photos/Hottub.jpg',
-    alt: 'The Sycamore — hot tub',
-    caption: 'Hot Tub · №03',
-  },
+const gallery = [
+  { src: '/photos/Title Shot of Cabin.jpg', alt: 'The Sycamore — cabin exterior', span: 'md:col-span-2 md:row-span-2' },
+  { src: '/photos/Title Shot window to outside.jpg', alt: 'The Sycamore — interior looking out' },
+  { src: '/photos/Bedroom 1.jpeg', alt: 'The Sycamore — bedroom' },
+  { src: '/photos/Indoor Fireplace.jpeg', alt: 'The Sycamore — indoor fireplace', span: 'md:col-span-2' },
+  { src: '/photos/Outdoor Kitchen with Stone Fireplace.jpg', alt: 'The Sycamore — outdoor kitchen with stone fireplace' },
+  { src: '/photos/Hottub.jpg', alt: 'The Sycamore — hot tub' },
 ];
 
 const amenities = [
@@ -36,20 +25,20 @@ const amenities = [
   'Indoor fireplace',
   'Full kitchen',
   'WiFi',
+  'Climate control',
   'Private parking',
-  'Snow-season access',
 ];
 
 export default function HomePage() {
   return (
     <>
-      {/* ────────────── HERO — SPLIT GRID ────────────── */}
+      {/* ────────────── HERO ────────────── */}
       <section className="relative grid grid-cols-1 md:grid-cols-[45%_55%] min-h-screen md:h-screen md:max-h-[900px]">
         <div className="relative z-[2] flex flex-col justify-end px-6 md:px-14 pt-32 md:pt-40 pb-16 md:pb-28">
           <p className="label fade-up mb-8" style={{ animationDelay: '0.3s' }}>
-            Issue 001 · Est. 2026
+            A Spruce Ridge Lodge property
           </p>
-          <h1 className="font-display text-[clamp(56px,7vw,100px)] leading-[0.95] text-cream font-normal">
+          <h1 className="font-display text-[clamp(56px,7vw,104px)] leading-[0.92] text-cream font-normal">
             <span className="title-line">
               <span className="title-line-inner">The</span>
             </span>
@@ -63,14 +52,7 @@ export default function HomePage() {
             className="fade-up font-body text-[15px] md:text-base text-cream/65 max-w-sm mt-8 md:mt-10 leading-[1.75]"
             style={{ animationDelay: '0.8s' }}
           >
-            A short-term rental shaped around the tree it was built for.
-            A stay with deliberate detail, near Summersville Lake, West Virginia.
-          </p>
-          <p
-            className="label-muted mt-14 md:mt-20 fade-up"
-            style={{ animationDelay: '1s' }}
-          >
-            A Spruce Ridge Lodge property
+            A short-term rental in the hills near Summersville Lake, West Virginia.
           </p>
         </div>
 
@@ -98,36 +80,35 @@ export default function HomePage() {
       </section>
 
       {/* ────────────── MARQUEE ────────────── */}
-      <section className="border-y border-ink-elevated py-5 overflow-hidden">
-        <div className="marquee-track flex gap-16 whitespace-nowrap">
-          {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
-            <span key={i} className="flex items-center gap-16 flex-shrink-0">
+      <section className="border-y border-ink-elevated py-5 overflow-hidden" aria-hidden="true">
+        <div className="marquee-track flex gap-20 whitespace-nowrap">
+          {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
+            <span key={i} className="flex items-center gap-20 flex-shrink-0">
               <span className="font-display italic text-stone text-sm">{item}</span>
-              <span className="text-gold-dark" aria-hidden="true">·</span>
+              <span className="text-gold-dark">·</span>
             </span>
           ))}
         </div>
       </section>
 
-      {/* ────────────── EDITORIAL №01 — STORY ────────────── */}
+      {/* ────────────── STORY ────────────── */}
       <section id="story" className="grid grid-cols-1 md:grid-cols-2 min-h-[80vh]">
         <div className="relative bg-ink-warm px-6 md:px-16 py-20 md:py-28 flex flex-col justify-center">
           <Reveal>
             <span className="gold-bar mb-8" />
-            <p className="label mb-8">The Property · №01</p>
-            <h2 className="font-display text-[clamp(32px,3.5vw,52px)] text-cream font-normal leading-[1.15] mb-8 balance">
-              A house shaped around <em className="italic text-gold">a tree.</em>
+            <p className="label mb-8">The Story</p>
+            <h2 className="font-display text-[clamp(32px,3.5vw,52px)] text-cream font-normal leading-[1.1] mb-8 balance">
+              A house built <em className="italic text-gold">around a tree.</em>
             </h2>
             <div className="font-body text-[15px] text-cream/65 leading-[1.9] max-w-md space-y-5 pretty">
               <p>
-                The Sycamore was built around the kind of detail you usually only
-                find in old stories — a full-grown tree held within the walls,
-                a roof framed to welcome it.
+                The sycamore came first. The house grew around it — the roof
+                framed to welcome it, the walls shaped to hold it.
               </p>
               <p>
-                The space is designed for stays that feel considered: warm
-                materials, thoughtful light, and the quiet that comes from being
-                somewhere with care in every decision.
+                What that means for a stay is harder to describe. Warm materials,
+                thoughtful light, and the quiet that comes from being somewhere
+                with care in every decision.
               </p>
             </div>
           </Reveal>
@@ -136,63 +117,77 @@ export default function HomePage() {
         <div className="relative overflow-hidden min-h-[400px] md:min-h-0">
           <Image
             src="/photos/Tree Feature.jpeg"
-            alt="The Sycamore — tree feature inside the house"
+            alt="The Sycamore — the tree inside the house"
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover transition-transform duration-[8000ms] ease-out hover:scale-[1.04]"
           />
-          <span
-            className="absolute top-8 right-8 font-display text-gold/20 text-[72px] leading-none pointer-events-none"
-            aria-hidden="true"
-          >
-            01
-          </span>
         </div>
       </section>
 
-      {/* ────────────── TRIPTYCH GALLERY ────────────── */}
-      <section id="gallery" className="bg-ink py-[3px] px-[3px]">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-[3px]">
-          {triptych.map((img, i) => (
-            <Reveal
-              key={img.src}
-              delay={i * 120}
-              className="relative h-[50vh] md:h-[60vh] overflow-hidden group cursor-pointer"
-            >
-              <Image
-                src={img.src}
-                alt={img.alt}
-                fill
-                sizes="(min-width: 768px) 33vw, 100vw"
-                className="object-cover grayscale-[30%] contrast-[1.1] transition-all duration-[800ms] ease-out group-hover:grayscale-0 group-hover:contrast-100 group-hover:scale-[1.03]"
-              />
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent"
-                aria-hidden="true"
-              />
-              <p className="absolute bottom-6 left-6 label text-gold translate-y-3 opacity-0 transition-all duration-[400ms] ease-out group-hover:translate-y-0 group-hover:opacity-100">
-                {img.caption}
-              </p>
+      {/* ────────────── GALLERY ────────────── */}
+      <section id="gallery" className="bg-ink border-t border-ink-elevated">
+        <div className="px-6 md:px-12 pt-20 md:pt-28 pb-12 max-w-[1800px] mx-auto">
+          <Reveal>
+            <p className="label mb-4">The Property</p>
+            <h2 className="font-display text-[clamp(32px,3.5vw,48px)] text-cream font-normal leading-[1.05] balance">
+              A walk through <em className="italic text-gold">The Sycamore.</em>
+            </h2>
+          </Reveal>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-[3px] auto-rows-[200px] md:auto-rows-[300px] px-[3px] pb-[3px]">
+          {gallery.map((img, i) => {
+            const isWide = img.span?.includes('col-span-2');
+            return (
+              <Reveal
+                key={img.src}
+                delay={i * 80}
+                className={`relative overflow-hidden group ${img.span ?? ''}`}
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  sizes={isWide ? '(min-width: 768px) 50vw, 100vw' : '(min-width: 768px) 25vw, 50vw'}
+                  className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+                />
+              </Reveal>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ────────────── STAY (amenities) ────────────── */}
+      <section className="px-6 md:px-12 py-24 md:py-32 max-w-[1400px] mx-auto">
+        <Reveal>
+          <span className="gold-bar mb-8" />
+          <p className="label mb-4">The Stay</p>
+          <h2 className="font-display text-[clamp(32px,3.5vw,48px)] text-cream font-normal leading-[1.05] mb-16 balance">
+            Small details, <em className="italic text-gold">deliberately chosen.</em>
+          </h2>
+        </Reveal>
+
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-0 list-none">
+          {amenities.map((item, i) => (
+            <Reveal key={item} delay={i * 40} as="li">
+              <div className="flex items-baseline gap-6 border-b border-ink-elevated py-5">
+                <span className="label text-gold-dark text-[10px] w-6">{String(i + 1).padStart(2, '0')}</span>
+                <span className="font-body text-base md:text-lg text-cream/85">{item}</span>
+              </div>
             </Reveal>
           ))}
-        </div>
-      </section>
+        </ul>
 
-      {/* ────────────── PULL QUOTE ────────────── */}
-      <section className="px-6 md:px-12 py-28 md:py-36 max-w-[1100px] mx-auto text-center">
-        <Reveal>
-          <span className="block font-display text-gold text-4xl mb-10" aria-hidden="true">—</span>
-          <blockquote className="font-display italic text-[clamp(28px,3.5vw,44px)] text-cream leading-[1.4] font-normal balance">
-            The sycamore came first.
-            <br />
-            The house <span className="text-gold">grew around it.</span>
-          </blockquote>
-          <p className="label-muted mt-10">The Property · Est. 2026</p>
+        <Reveal delay={400}>
+          <p className="label-muted italic mt-10 opacity-70">
+            Sleeps [TBD] · minimum stay [TBD] — confirmed with booking
+          </p>
         </Reveal>
       </section>
 
-      {/* ────────────── EDITORIAL №02 — LOCATION ────────────── */}
-      <section className="grid grid-cols-1 md:grid-cols-2 min-h-[80vh]">
+      {/* ────────────── LOCATION ────────────── */}
+      <section className="grid grid-cols-1 md:grid-cols-2 min-h-[70vh] border-t border-ink-elevated">
         <div className="relative overflow-hidden min-h-[400px] md:min-h-0 order-2 md:order-1">
           <Image
             src="/photos/Summersville Lake_Surrounding Area.jpg"
@@ -201,40 +196,25 @@ export default function HomePage() {
             sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover transition-transform duration-[8000ms] ease-out hover:scale-[1.04]"
           />
-          <span
-            className="absolute top-8 left-8 font-display text-gold/20 text-[72px] leading-none pointer-events-none"
-            aria-hidden="true"
-          >
-            02
-          </span>
         </div>
 
         <div className="relative bg-ink-warm px-6 md:px-16 py-20 md:py-28 flex flex-col justify-center order-1 md:order-2">
           <Reveal>
             <span className="gold-bar mb-8" />
-            <p className="label mb-8">The Setting · №02</p>
-            <h2 className="font-display text-[clamp(32px,3.5vw,52px)] text-cream font-normal leading-[1.15] mb-8 balance">
-              Near <em className="italic text-gold">Summersville Lake</em>, in the West Virginia hills.
+            <p className="label mb-8">The Setting</p>
+            <h2 className="font-display text-[clamp(32px,3.5vw,52px)] text-cream font-normal leading-[1.1] mb-8 balance">
+              Near <em className="italic text-gold">Summersville Lake.</em>
             </h2>
-            <div className="font-body text-[15px] text-cream/65 leading-[1.9] max-w-md space-y-5 pretty mb-10">
+            <div className="font-body text-[15px] text-cream/65 leading-[1.9] max-w-md space-y-5 pretty">
               <p>
-                The Sycamore sits in a part of the state where the hills slow
-                everything down. Exact address shared with confirmed guests.
+                The hills of central West Virginia — close to the lake, within
+                reach of the New River Gorge, and a short drive from the small
+                towns that still feel like a slower version of the country.
               </p>
-              <p>
-                A short drive to the lake, the New River Gorge, and the quiet
-                small towns of central Appalachia.
+              <p className="label-muted text-[10px] italic opacity-70">
+                Exact address shared with confirmed guests.
               </p>
             </div>
-
-            <ul className="grid grid-cols-2 gap-x-6 gap-y-3 list-none">
-              {amenities.map((item, i) => (
-                <li key={item} className="flex items-baseline gap-3 border-b border-ink-elevated pb-2">
-                  <span className="label text-gold-dark text-[9px] w-4">{String(i + 1).padStart(2, '0')}</span>
-                  <span className="font-body text-[13px] text-cream/80">{item}</span>
-                </li>
-              ))}
-            </ul>
           </Reveal>
         </div>
       </section>
